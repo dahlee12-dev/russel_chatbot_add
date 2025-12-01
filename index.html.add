@@ -1,4 +1,3 @@
-챗봇 성적별 수업 추천 전 html 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -128,223 +127,17 @@
 
 <script>
   /* ===============================
-     메뉴 & URL 설정
-     =============================== */
-  const MENU_DATA = {
-
-    // 1. 학원 이용 가이드
-    "학원 이용 가이드": [
-      {
-        label: "학원 공지사항",
-        desc: "최근 학원 공지 및 안내사항",
-        url: "https://russeldc.megastudy.net/russel/info/notice/notice.asp"
-      },
-      {
-        label: "설명회 예약/알림",
-        desc: "설명회 일정 확인 및 알림 신청",
-        url: "https://russeldc.megastudy.net/russel/entinfo/entry_pt/enter_pt_list.asp"
-      },
-      {
-        label: "자주하는 질문",
-        desc: "등록, 수강, 환불 등 FAQ",
-        url: "https://russeldc.megastudy.net/russel/info/qna/faq.asp"
-      },
-      {
-        label: "1:1 온라인 상담",
-        desc: "온라인 학습·진학 상담 신청",
-        url: "https://russeldc.megastudy.net/russel/info/qna/qna.asp"
-      },
-      {
-        label: "단과 마감강좌 대기 신청",
-        desc: "마감된 단과 강좌 대기 신청",
-        url: "https://russeldc.megastudy.net/russel/info/waiting/list.asp?ClsCode=1"
-      },
-      {
-        label: "모의고사 구매",
-        desc: "러셀 모의고사 구매",
-        url: "https://russeldc.megastudy.net/russel/online_mock/index.asp"
-      },
-      {
-        label: "마이페이지(재등록/교재/좌석/급식)",
-        desc: "재등록, 교재, 좌석예약, 급식 신청",
-        url: "https://russeldc.megastudy.net/russel/entinfo/online/service.asp"
-      }
-    ],
-
-    // 2. 모집요강 및 단과 시간표
-    "모집요강 및 단과 시간표": [
-      {
-        label: "N수 우선선발반 모집요강",
-        desc: "2026 N수 우선선발반 모집 안내",
-        url: "https://russeldc.megastudy.net/intro/2026/first/index.asp"
-      },
-      {
-        label: "재학생 윈터스쿨 모집요강",
-        desc: "재학생 윈터스쿨 모집 안내",
-        url: "https://russeldc.megastudy.net/intro/2025/winter/index.asp"
-      },
-      {
-        label: "고3/N수 단과 시간표",
-        desc: "고3·N수 단과 강좌 시간표",
-        url: "https://russeldc.megastudy.net/russel/campus_common/russel_danka/russel_danka_new.asp?idx=2198"
-      },
-      {
-        label: "고1/2 단과 시간표",
-        desc: "고1·고2 단과 강좌 시간표",
-        url: "https://russeldc.megastudy.net/russel/campus_common/russel_danka/russel_danka_new.asp?idx=2185"
-      },
-      {
-        label: "시즌/특강 시간표",
-        desc: "시즌·특강(파이널 등) 시간표",
-        url: "https://russeldc.megastudy.net/russel/campus_common/russel_danka/russel_danka_new.asp?idx=2184"
-      },
-      {
-        label: "논술 특강 시간표",
-        desc: "논술 특강 시간표",
-        url: "https://russeldc.megastudy.net/russel/campus_common/russel_danka/russel_danka_new.asp?idx=2105"
-      }
-    ],
-
-    // 3. 바른공부 자습전용관
-    "바른공부 자습전용관": [
-      {
-        label: "자습전용관 운영·이용 안내",
-        desc: "바른공부 자습전용관 운영·이용 안내",
-        url: "https://russeldc.megastudy.net/russel/info/study_hall/study_hall.asp"
-      },
-      {
-        label: "재학생 특별 혜택",
-        desc: "재학생 대상 특별 혜택 안내",
-        url: "https://russeldc.megastudy.net/russel/event/2020/megapass/megapass.asp"
-      },
-      {
-        label: "주간 식단표",
-        desc: "이번 주 학원 식단표 확인",
-        url: "https://russeldc.megastudy.net/russel/campus_common/campus/weekly_food.asp"
-      }
-    ],
-
-    // 4. 모의고사 일정/콘텐츠
-    "모의고사 일정/콘텐츠": [
-      {
-        label: "2026년 모의고사 일정",
-        desc: "2026년 러셀 모의고사 일정 안내",
-        url: "https://russeldc.megastudy.net/russel/entinfo/test_schedule.asp?year=2026"
-      },
-      {
-        label: "OMEGA 모의고사",
-        desc: "OMEGA 모의고사 소개",
-        url: "https://russeldc.megastudy.net/event/omega_intro/index.asp"
-      },
-      {
-        label: "전국 대단위 실전 모의고사",
-        desc: "전국 대단위 실전 모의고사 안내",
-        url: "https://russeldc.megastudy.net/event/2025/jdsm/index.asp"
-      },
-      {
-        label: "메대프 모의고사",
-        desc: "메대프 모의고사 소개",
-        url: "https://russeldc.megastudy.net/intro/2022/premium/index.asp"
-      },
-      {
-        label: "ALPHA 모의고사",
-        desc: "ALPHA 모의고사 소개",
-        url: "https://russeldc.megastudy.net/event/2025/alpha/index.asp"
-      }
-    ],
-
-    // 5. 출강 선생님 안내
-    "출강 선생님 안내": [
-      {
-        label: "국어",
-        desc: "국어 출강 선생님 소개",
-        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0023"
-      },
-      {
-        label: "수학",
-        desc: "수학 출강 선생님 소개",
-        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0024"
-      },
-      {
-        label: "영어",
-        desc: "영어 출강 선생님 소개",
-        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0025"
-      },
-      {
-        label: "한국사",
-        desc: "한국사 출강 선생님 소개",
-        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0049"
-      },
-      {
-        label: "사회",
-        desc: "사회 출강 선생님 소개",
-        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0026"
-      },
-      {
-        label: "과학",
-        desc: "과학 출강 선생님 소개",
-        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0027"
-      },
-      {
-        label: "논술",
-        desc: "논술 출강 선생님 소개",
-        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0028"
-      }
-    ],
-
-    // 6. 학원 이용 안내
-    "학원 이용 안내": [
-      {
-        label: "학원 시설",
-        desc: "강의실, 자습실 등 시설 안내",
-        url: "https://russeldc.megastudy.net/russel/info/campus_facility.asp"
-      },
-      {
-        label: "오시는 길",
-        desc: "러셀 대치학원 위치 안내",
-        url: "https://russeldc.megastudy.net/russel/info/location.asp"
-      },
-      {
-        label: "문자 알림 신청",
-        desc: "학원 문자 알림 신청/관리",
-        url: "https://russeldc.megastudy.net/russel/entinfo/entry_pt/enter_pt_list.asp"
-      }
-    ],
-
-    // [우석 추가] 7. 나의 수강정보 메뉴 추가
-    "나의 수강정보": [
-      {
-        label: "수강정보",
-        desc: "현재 수강중/지난 수강내역 조회",
-        url: "https://russeldc.megastudy.net/russel/mypage/lecture_course.asp"
-      },
-      {
-        label: "대기정보",
-        desc: "대기 강좌 및 대기번호 조회",
-        url: "https://russeldc.megastudy.net/russel/mypage/waiting.asp"
-      },
-      {
-        label: "결제내역",
-        desc: "결제내역 및 영수증 조회",
-        url: "https://russeldc.megastudy.net/russel/mypage/student/account_list.asp"
-      },
-      {
-        label: "환불신청",
-        desc: "단과/교재/바자관 환불신청 메뉴",
-        url: "https://russeldc.megastudy.net/russel/mypage/mypage.asp"
-      }
-    ]
-  };
-
-  /* ===============================
-     공통 JS 로직
+     메뉴 & URL 설정: russel.json에서 로드
      =============================== */
 
+  // russel.json 내용을 담을 객체
+  let MENU_DATA = {};
+  let MAIN_MENUS = [];
+
+  // DOM 요소
   const chat = document.getElementById("chat");
   const btnList = document.getElementById("btn-list");
   const btnTitle = document.getElementById("btn-title");
-
-  const MAIN_MENUS = Object.keys(MENU_DATA);
 
   // [우석 추가] Google Apps Script 웹훅 URL (구글 시트 연동용)
   const SHEET_WEBHOOK_URL =
@@ -359,6 +152,10 @@
     // "N수 영어 실전반"
   ];
 
+  /* ===============================
+     공통 JS 로직
+     =============================== */
+
   function addBotMessage(text, linksHtml = "") {
     const wrap = document.createElement("div");
     wrap.className = "msg msg-bot";
@@ -367,9 +164,8 @@
     bubble.className = "bubble";
     bubble.textContent = text;
 
-    // 기존 오타 수정: 풍선껌 → bubble (정상 작동용)
-    // [우석 추가] 말풍선 요소를 실제로 채팅 영역에 붙이기
-    wrap.appendChild(풍선껌);
+    // ✅ 오타 수정: 풍선껌 → bubble
+    wrap.appendChild(bubble);
 
     if (linksHtml) {
       const box = document.createElement("div");
@@ -386,6 +182,7 @@
   function renderMainButtons() {
     btnTitle.textContent = "원하시는 메뉴를 선택해 주세요.";
     btnList.innerHTML = "";
+
     MAIN_MENUS.forEach(menu => {
       const btn = document.createElement("button");
       btn.className = "chip-btn main";
@@ -408,26 +205,26 @@
       const btn = document.createElement("button");
       btn.className = "chip-btn";
       btn.textContent = item.label;
-      btn.title = item.desc;
+      btn.title = item.desc || "";
 
       // [우석 추가] 나의 수강정보 메뉴 내 특수 동작 분기
-      if (item.label === "수강정보") {
-        // [우석 추가] 수강정보: 현재/지난 수강내역 안내용
+      if (menuName === "나의 수강정보" && item.label === "수강정보") {
         btn.onclick = () => handleCourseInfo();
-      } else if (item.label === "대기정보") {
-        // [우석 추가] 대기정보: 학반/강좌, 담임/강사, 대기번호 안내용
+      } else if (menuName === "나의 수강정보" && item.label === "대기정보") {
         btn.onclick = () => handleWaitingInfo();
-      } else if (item.label === "결제내역") {
-        // [우석 추가] 결제내역: 학원/결제일자/구매내역/금액/수단/상태 안내용
+      } else if (menuName === "나의 수강정보" && item.label === "결제내역") {
         btn.onclick = () => handlePaymentInfo();
-      } else if (item.label === "환불신청") {
-        // [우석 추가] 환불신청: 단과/교재/바자관 하위 메뉴 렌더링
+      } else if (menuName === "나의 수강정보" && item.label === "환불신청") {
         btn.onclick = () => renderRefundSubMenu();
       } else {
         // 기본 동작: 페이지 이동 + 링크 안내
         btn.onclick = () => {
+          if (!item.url) {
+            addBotMessage(`${item.label} 페이지 정보가 없습니다.`);
+            return;
+          }
           const html = `<a href="${item.url}" target="_blank">${item.label} 바로가기</a>`;
-          addBotMessage(`${item.label} 페이지로 이동합니다.\n(${item.desc})`, html);
+          addBotMessage(`${item.label} 페이지로 이동합니다.\n(${item.desc || ""})`, html);
           window.open(item.url, "_blank");
         };
       }
@@ -449,11 +246,10 @@
      [우석 추가] 수강정보 / 대기정보 / 결제내역 처리
      =============================== */
 
-  // [우석 추가] 수강정보: 현재 수강중 / 지난 수강내역 안내
+  // 수강정보: 현재 수강중 / 지난 수강내역 안내
   function handleCourseInfo() {
-    // 실제 연동 시, 아래 배열에 데이터 주입 가능
-    const currentCourses = []; // 현재 수강중 강좌
-    const pastCourses = [];    // 지난 수강내역
+    const currentCourses = []; // 실제 연동 시 여기에 데이터 주입
+    const pastCourses = [];
 
     if (currentCourses.length === 0) {
       addBotMessage("📌 현재 수강중인 강좌가 없습니다.");
@@ -476,10 +272,10 @@
     }
   }
 
-  // [우석 추가] 대기정보: 학반/강좌, 담임/강사, 대기번호 안내
+  // 대기정보: 학반/강좌, 담임/강사, 대기번호 안내
   function handleWaitingInfo() {
     const waitingList = [
-      // 예시 형태:
+      // 예시:
       // { lecture: "고3 국어 심화반", teacher: "김태훈T", waitNo: 3 },
       // { lecture: "N수 수학 단과", teacher: "박승현T", waitNo: 1 }
     ];
@@ -499,10 +295,10 @@
     addBotMessage(msg);
   }
 
-  // [우석 추가] 결제내역: 학원/결제일자/구매내역/금액/수단/상태 안내
+  // 결제내역: 학원/결제일자/구매내역/금액/수단/상태 안내
   function handlePaymentInfo() {
     const paymentList = [
-      // 예시 형태:
+      // 예시:
       // {
       //   campus: "러셀 대치",
       //   date: "2025-01-03",
@@ -553,10 +349,8 @@
       b.textContent = sub.label;
 
       if (sub.label === "단과환불 신청") {
-        // [우석 추가] 단과 환불 신청: 실제 환불 신청 로직 연결
         b.onclick = () => handleRefundSingle();
       } else {
-        // [우석 추가] 교재/바자관 환불은 추후 구현 예정 (현재는 안내만)
         b.onclick = () => addBotMessage(`${sub.label} 기능은 추후 오픈 예정입니다.`);
       }
 
@@ -571,10 +365,10 @@
   }
 
   /* ===============================
-     [우석 추가] 학생 정보 관리(localStorage) + 구글 시트 연동 + 단과 환불 처리
+     학생 정보 관리(localStorage) + 구글 시트 연동 + 단과 환불 처리
      =============================== */
 
-  // [우석 추가] 학생 정보(이름/학번)를 최초 1회 입력받고 localStorage에 저장
+  // 학생 정보(이름/학번)를 최초 1회 입력받고 localStorage에 저장
   function getStudentInfo() {
     let name = localStorage.getItem("studentName");
     let studentId = localStorage.getItem("studentId");
@@ -595,16 +389,16 @@
     return { name, studentId };
   }
 
-  // [우석 추가] 구글 시트(Google Apps Script Webhook)로 환불 정보를 전송
+  // 구글 시트(Google Apps Script Webhook)로 환불 정보를 전송
   function sendRefundToSheet(type, name, studentId, courses) {
     fetch(SHEET_WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        type: type,          // "single" | "book" | "bazaar"
-        name: name,          // 학생 이름
+        type: type,           // "single" | "book" | "bazaar"
+        name: name,           // 학생 이름
         studentId: studentId, // 재원생 학번
-        courses: courses     // 환불 신청 강좌 배열
+        courses: courses      // 환불 신청 강좌 배열
       })
     })
       .then(res => res.text())
@@ -616,7 +410,7 @@
       });
   }
 
-  // [우석 추가] 단과환불 신청: 현재 수강중 강좌에서 중복 선택 후 시트에 자동 입력
+  // 단과환불 신청: 현재 수강중 강좌에서 중복 선택 후 시트에 자동 입력
   function handleRefundSingle() {
     const student = getStudentInfo();
     if (!student) return;
@@ -662,17 +456,20 @@
         return;
       }
 
-      // [우석 추가] 총 N개 강좌 환불 완료 안내
       addBotMessage(`총 ${selected.length}개 강좌 환불 신청이 완료되었습니다.`);
 
-      // [우석 추가] 선택한 강좌 정보를 구글 시트에 기록
+      // 선택한 강좌 정보를 구글 시트에 기록
       sendRefundToSheet("single", student.name, student.studentId, selected);
     };
 
     btnList.appendChild(okBtn);
   }
 
-  function init() {
+  /* ===============================
+     초기화 & russel.json 로딩
+     =============================== */
+
+  function initChatbot() {
     const firstMsg =
       "안녕하세요. 메가스터디 러셀 대치학원 챗봇입니다.\n\n" +
       "학원 이용, 모집요강, 단과 시간표, 자습전용관, 모의고사, 출강 선생님, 나의 수강정보까지\n" +
@@ -681,7 +478,27 @@
     renderMainButtons();
   }
 
-  init();
+  // russel.json 불러오기
+  async function loadMenuData() {
+    try {
+      addBotMessage("메뉴 정보를 불러오는 중입니다. 잠시만 기다려 주세요...");
+      const res = await fetch("russel.json");
+      if (!res.ok) {
+        throw new Error("russel.json을 불러오지 못했습니다.");
+      }
+      const data = await res.json();
+      MENU_DATA = data;
+      MAIN_MENUS = Object.keys(MENU_DATA);
+      // 로딩 메시지 이후 초기화
+      initChatbot();
+    } catch (err) {
+      console.error(err);
+      addBotMessage("메뉴 정보를 불러오는 데 실패했습니다. russel.json 파일을 확인해 주세요.");
+    }
+  }
+
+  // 스크립트 로드 후 바로 JSON 로딩 시작
+  loadMenuData();
 </script>
 </body>
 </html>
