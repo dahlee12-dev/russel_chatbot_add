@@ -134,8 +134,18 @@
   fetch("russel.json")
     .then(res => res.json())
     .then(data => {
-      COURSE_DATA = data;
-      console.log("시간표 JSON 로딩 완료", COURSE_DATA);
+      // russel.json 구조를 유연하게 처리
+      if (Array.isArray(data)) {
+        COURSE_DATA = data;
+      } else if (Array.isArray(data.courses)) {
+        COURSE_DATA = data.courses;
+      } else if (Array.isArray(data.data)) {
+        COURSE_DATA = data.data;
+      } else {
+        COURSE_DATA = [];
+        console.error("지원하지 않는 russel.json 형식:", data);
+      }
+      console.log("시간표 JSON 로딩 완료, 길이:", COURSE_DATA.length);
     })
     .catch(err => {
       console.error("russel.json 로딩 오류:", err);
@@ -362,16 +372,12 @@
   const btnList = document.getElementById("btn-list");
   const btnTitle = document.getElementById("btn-title");
 
-  // 메인 메뉴 + 성적별 추천 메뉴
   const MAIN_MENUS = [...Object.keys(MENU_DATA), RECOMMEND_MENU_KEY];
 
-  // 구글 시트 웹훅 (단과환불용)
   const SHEET_WEBHOOK_URL =
     "https://script.google.com/macros/s/AKfycbyyz-H4DhCk3fRDOJIo55ReRVabSCccHLAmfNbsgBvu8z3IiyUJH10mWDR9Ca371tMM/exec";
 
-  // 현재 수강중 강좌 목록 (단과 환불 선택용 - 실제 운용 시 데이터 넣기)
   const currentCoursesData = [
-    // 예시:
     // "고3 국어 심화반",
     // "고3 수학 단과(기하)",
     // "N수 영어 실전반"
@@ -384,8 +390,6 @@
     const bubble = document.createElement("div");
     bubble.className = "bubble";
     bubble.textContent = text;
-
-    // ★ 반드시 bubble을 붙여야 채팅이 보임
     wrap.appendChild(bubble);
 
     if (linksHtml) {
@@ -409,9 +413,9 @@
       btn.textContent = menu;
       btn.onclick = () => {
         if (menu === RECOMMEND_MENU_KEY) {
-          openRecommendFlow();   // 성적별 추천 플로우
+          openRecommendFlow();
         } else {
-          openMenu(menu);        // 일반 메뉴
+          openMenu(menu);
         }
       };
       btnList.appendChild(btn);
@@ -433,7 +437,6 @@
       btn.textContent = item.label;
       btn.title = item.desc;
 
-      // 나의 수강정보 메뉴 안에서만 특수 동작 분기
       if (menuName === "나의 수강정보" && item.label === "수강정보") {
         btn.onclick = () => handleCourseInfo();
       } else if (menuName === "나의 수강정보" && item.label === "대기정보") {
@@ -443,7 +446,6 @@
       } else if (menuName === "나의 수강정보" && item.label === "환불신청") {
         btn.onclick = () => renderRefundSubMenu();
       } else {
-        // 일반 메뉴: 링크 이동
         btn.onclick = () => {
           const html = `<a href="${item.url}" target="_blank">${item.label} 바로가기</a>`;
           addBotMessage(`${item.label} 페이지로 이동합니다.\n(${item.desc})`, html);
@@ -469,13 +471,24 @@
      =============================== */
 
   function recommendCourses(subject, levelText) {
-    return COURSE_DATA.filter(item =>
-      String(item.subject).replace(/\s/g, "") === subject &&
-      item.level_text === levelText
-    );
+    if (!Array.isArray(COURSE_DATA)) {
+      console.error("COURSE_DATA가 배열이 아님:", COURSE_DATA);
+      return [];
+    }
+
+    return COURSE_DATA.filter(item => {
+      const subj = String(item.subject || "").replace(/\s/g, "");
+      const lvl  = String(item.level_text || "").trim();
+      return subj === subject && lvl === levelText;
+    });
   }
 
   function showRecommendResult(subject, levelText) {
+    if (!COURSE_DATA || COURSE_DATA.length === 0) {
+      addBotMessage("시간표 데이터가 아직 로딩되지 않았습니다.\n잠시 후 다시 성적별 수업 추천을 눌러 주세요.");
+      return;
+    }
+
     const list = recommendCourses(subject, levelText);
 
     let text = `『${subject} / ${levelText}』 수업 추천입니다.\n\n`;
@@ -567,7 +580,7 @@
      =============================== */
 
   function handleCourseInfo() {
-    const currentCourses = []; // 실사용 시 데이터 채우기
+    const currentCourses = [];
     const pastCourses = [];
 
     if (currentCourses.length === 0) {
@@ -592,7 +605,7 @@
   }
 
   function handleWaitingInfo() {
-    const waitingList = []; // 실사용 시 데이터 채우기
+    const waitingList = [];
 
     if (waitingList.length === 0) {
       addBotMessage("현재 대기중인 강좌가 없습니다.");
@@ -609,7 +622,7 @@
   }
 
   function handlePaymentInfo() {
-    const paymentList = []; // 실사용 시 데이터 채우기
+    const paymentList = [];
 
     if (paymentList.length === 0) {
       addBotMessage("💳 결제내역이 없습니다.");
