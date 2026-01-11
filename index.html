@@ -160,6 +160,9 @@
 
   /* ===============================
      1) 상단 메뉴 & URL 설정
+     - 요청 반영:
+       1) "단과/모의고사 안내" -> "단과 안내"
+       2) "출강 선생님 안내" 를 "단과 안내" 하위 메뉴로 이동
      =============================== */
   const MENU_DATA = {
     "학원 이용 가이드": [
@@ -243,43 +246,53 @@
         "url": "https://russeldc.megastudy.net/event/2025/alpha/index.asp"
       }
     ],
-    "출강 선생님 안내": [
+
+    /* ✅ "출강 선생님 안내" 섹션 제거하고,
+       ✅ 아래 "단과 안내" 하위로 옮김 */
+    "단과 안내": [
       {
-        "label": "국어",
-        "desc": "국어 출강 선생님 소개",
-        "url": "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0023"
+        label: "모의고사 구매",
+        desc: "러셀 모의고사 구매",
+        url: "https://russeldc.megastudy.net/russel/online_mock/index.asp"
+      },
+      // 출강 선생님 안내(기존 섹션 하위 메뉴로 이동)
+      {
+        label: "국어 선생님",
+        desc: "국어 출강 선생님 소개",
+        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0023"
       },
       {
-        "label": "수학",
-        "desc": "수학 출강 선생님 소개",
-        "url": "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0024"
+        label: "수학 선생님",
+        desc: "수학 출강 선생님 소개",
+        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0024"
       },
       {
-        "label": "영어",
-        "desc": "영어 출강 선생님 소개",
-        "url": "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0025"
+        label: "영어 선생님",
+        desc: "영어 출강 선생님 소개",
+        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0025"
       },
       {
-        "label": "한국사",
-        "desc": "한국사 출강 선생님 소개",
-        "url": "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0049"
+        label: "한국사 선생님",
+        desc: "한국사 출강 선생님 소개",
+        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0049"
       },
       {
-        "label": "사회",
-        "desc": "사회 출강 선생님 소개",
-        "url": "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0026"
+        label: "사회 선생님",
+        desc: "사회 출강 선생님 소개",
+        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0026"
       },
       {
-        "label": "과학",
-        "desc": "과학 출강 선생님 소개",
-        "url": "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0027"
+        label: "과학 선생님",
+        desc: "과학 출강 선생님 소개",
+        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0027"
       },
       {
-        "label": "논술",
-        "desc": "논술 출강 선생님 소개",
-        "url": "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0028"
+        label: "논술 선생님",
+        desc: "논술 출강 선생님 소개",
+        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0028"
       }
     ],
+
     "나의 수강정보": [
       {
         "label": "수강정보",
@@ -300,13 +313,6 @@
         "label": "환불신청",
         "desc": "단과/교재/바자관 환불신청 메뉴",
         "url": ""
-      }
-    ],
-    "단과/모의고사 안내": [
-      {
-        label: "모의고사 구매",
-        desc: "러셀 모의고사 구매",
-        url: "https://russeldc.megastudy.net/russel/online_mock/index.asp"
       }
     ]
   };
@@ -382,17 +388,17 @@
       btn.textContent = item.label;
       btn.title = item.desc;
 
-      // ✅ 1) "학원 이용 가이드"의 "오시는 길"은 설명 + 링크만 제공(자동이동 X)
+      // ✅ "학원 이용 가이드"의 "오시는 길"은 설명 + 링크만 제공(자동이동 X)
       if (menuName === "학원 이용 가이드" && item.label === "오시는 길") {
         btn.onclick = () => {
           const explain =
             "📍 러셀 대치학원 오시는 길 안내입니다.\n\n" +
             "• 대중교통(지하철/버스) 이용\n" +
-            "• 건물 위치 안내\n"+ 
+            "• 건물 위치 안내\n" +
             "  [본관] 서울시 강남구 남부순환로 2942, 6층(대치동, 풍림빌딩)\n" +
             "  [별관] 서울시 강남구 삼성로 155, 대치 퍼스트 빌딩\n" +
             "• 주차장 위치 안내\n" +
-            "  풍림프라자 빌딩 뒷 편에 위치(별관 주차 불가) \n\n" +
+            "  풍림프라자 빌딩 뒷 편에 위치(별관 주차 불가)\n\n" +
             "아래 링크에서 지도로 자세히 확인하실 수 있습니다.";
 
           const html =
@@ -402,7 +408,7 @@
           addBotMessage(explain, html);
         };
       }
-      // ✅ 2) "모의고사 일정/콘텐츠"의 "2026년 모의고사 일정"은 올해 일정 먼저 안내 + 링크 제공(자동이동 X)
+      // ✅ "모의고사 일정/콘텐츠"의 "2026년 모의고사 일정"은 올해 일정 안내 + 링크 제공(자동이동 X)
       else if (menuName === "모의고사 일정/콘텐츠" && item.label === "2026년 모의고사 일정") {
         btn.onclick = () => {
           const scheduleText =
@@ -774,7 +780,7 @@
   function init() {
     const firstMsg =
       "안녕하세요. 메가스터디 러셀 대치학원 챗봇입니다.\n\n" +
-      "학원 이용, 자습전용관, 모의고사, 출강 선생님, 나의 수강정보, 성적별 수업 추천 기능을 제공합니다.\n" +
+      "학원 이용, 자습전용관, 모의고사, 단과 안내, 나의 수강정보, 성적별 수업 추천 기능을 제공합니다.\n" +
       "아래 버튼을 눌러 궁금한 내용을 선택해 주세요.";
     addBotMessage(firstMsg);
     renderMainButtons();
