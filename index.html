@@ -7,127 +7,167 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f3f4f6;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background: #f4f6fb;
+      color: #222;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
       min-height: 100vh;
       padding: 20px;
     }
     .app {
       width: 100%;
-      max-width: 420px;
-      background: #ffffff;
-      border-radius: 16px;
+      max-width: 760px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 6px 24px rgba(0,0,0,.10);
       overflow: hidden;
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
       display: flex;
       flex-direction: column;
-      height: 700px;
+      min-height: 88vh;
     }
     header {
-      background: #0072ff;
-      color: #ffffff;
-      padding: 14px 16px;
+      background: linear-gradient(90deg, #0a5fff, #0a3cff);
+      color: #fff;
+      padding: 18px 18px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      font-size: 14px;
+      gap: 12px;
     }
-    header h1 {
-      font-size: 16px;
-      font-weight: 700;
+    header .logo {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.16);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      letter-spacing: .5px;
     }
-    header span {
+    header .title {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    header .title h1 {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    header .title p {
       font-size: 12px;
-      opacity: 0.9;
+      opacity: .9;
     }
-    .chat-area {
+
+    .chat {
+      padding: 18px 16px;
+      overflow: auto;
       flex: 1;
-      padding: 12px 14px;
-      overflow-y: auto;
-      background: #f9fafb;
+      background: #f7f9ff;
     }
     .msg {
-      margin-bottom: 10px;
       display: flex;
-      align-items: flex-start;
-      gap: 6px;
+      margin: 10px 0;
+    }
+    .msg-bot { justify-content: flex-start; }
+    .msg-user { justify-content: flex-end; }
+    .bubble {
+      max-width: 86%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      white-space: pre-line;
+      font-size: 14px;
+      line-height: 1.55;
+      box-shadow: 0 2px 10px rgba(0,0,0,.06);
     }
     .msg-bot .bubble {
-      background: #e5e7eb;
-      color: #111827;
-      border-radius: 14px;
-      border-bottom-left-radius: 4px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.06);
     }
-    .bubble {
+    .msg-user .bubble {
+      background: #0a5fff;
+      color: #fff;
+    }
+    .links {
+      margin-top: 10px;
       font-size: 13px;
-      padding: 9px 11px;
-      line-height: 1.4;
-      max-width: 85%;
-      white-space: pre-line;
+      line-height: 1.5;
     }
-    .link-list {
-      margin-top: 6px;
-      font-size: 12px;
-    }
-    .link-list a {
-      color: #2563eb;
+    .links a {
+      color: #0a5fff;
       text-decoration: none;
+      font-weight: 700;
     }
-    .link-list a:hover {
-      text-decoration: underline;
+    .links a:hover { text-decoration: underline; }
+
+    .panel {
+      border-top: 1px solid rgba(0,0,0,.08);
+      padding: 14px 14px 16px;
+      background: #fff;
     }
-    .btn-area {
-      border-top: 1px solid #e5e7eb;
-      padding: 10px 10px 14px;
-      background: #ffffff;
-    }
-    .btn-title {
-      font-size: 12px;
-      color: #6b7280;
-      margin-bottom: 6px;
+    .panel .panel-title {
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #0a3cff;
     }
     .btn-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
     }
     .chip-btn {
+      border: 1px solid rgba(10,95,255,.22);
+      background: #fff;
+      color: #0a3cff;
+      padding: 10px 12px;
       border-radius: 999px;
-      border: 1px solid #d1d5db;
-      padding: 7px 12px;
-      font-size: 12px;
-      background: #ffffff;
+      font-weight: 800;
+      font-size: 13px;
       cursor: pointer;
+      transition: transform .06s ease, background .12s ease;
     }
+    .chip-btn:hover { background: rgba(10,95,255,.06); }
+    .chip-btn:active { transform: scale(.98); }
     .chip-btn.main {
-      font-weight: 600;
+      border: none;
+      background: rgba(10,95,255,.10);
     }
-    .chip-btn:hover {
-      background: #f3f4f6;
+    .hint {
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(0,0,0,.55);
+      line-height: 1.5;
+    }
+    .divider {
+      height: 1px;
+      background: rgba(0,0,0,.08);
+      margin: 10px 0;
     }
   </style>
 </head>
 <body>
-<div class="app">
-  <header>
-    <h1>메가스터디 러셀 챗봇</h1>
-    <span>대치학원 안내</span>
-  </header>
+  <div class="app">
+    <header>
+      <div class="logo">R</div>
+      <div class="title">
+        <h1>메가스터디 러셀 대치학원 챗봇</h1>
+        <p>학원이용 · 자습전용관 · 모의고사 · 단과안내 · 나의 수강정보 · 성적별 추천</p>
+      </div>
+    </header>
 
-  <div class="chat-area" id="chat"></div>
+    <div id="chat" class="chat"></div>
 
-  <div class="btn-area">
-    <div class="btn-title" id="btn-title">원하시는 메뉴를 선택해 주세요.</div>
-    <div class="btn-list" id="btn-list"></div>
+    <div class="panel">
+      <div id="btn-title" class="panel-title">원하시는 메뉴를 선택해 주세요.</div>
+      <div id="btn-list" class="btn-list"></div>
+      <div class="hint">
+        ※ 링크가 있는 메뉴는 새 창으로 열립니다. (일부 메뉴는 챗봇 내 텍스트 안내 방식)
+      </div>
+    </div>
   </div>
-</div>
 
 <script>
   /* ===============================
-     0) russel.json 로딩 (성적별 추천용)
+     0) 시간표 데이터 로딩 (성적별 추천용)
      =============================== */
   let COURSE_DATA = [];
   let COURSE_LOADED = false;
@@ -135,33 +175,23 @@
 
   fetch("russel.json")
     .then(res => res.json())
-    .then(data => {
-      if (Array.isArray(data)) {
-        COURSE_DATA = data;
-      } else if (Array.isArray(data.courses)) {
-        COURSE_DATA = data.courses;
-      } else if (Array.isArray(data.data)) {
-        COURSE_DATA = data.data;
-      } else {
-        COURSE_DATA = [];
-        console.error("지원하지 않는 russel.json 형식:", data);
-      }
+    .then(json => {
+      COURSE_DATA = Array.isArray(json) ? json : (json.data || []);
       COURSE_LOADED = true;
-      console.log("시간표 JSON 로딩 완료, 길이:", COURSE_DATA.length);
     })
     .catch(err => {
+      console.error("russel.json load error:", err);
       COURSE_LOAD_FAILED = true;
-      console.error("russel.json 로딩 오류:", err);
     });
+
+  /* ===============================
+     1) 메뉴 데이터
+     =============================== */
 
   const RECOMMEND_MENU_KEY = "성적별 수업 추천";
   const SUBJECT_LIST = ["국어", "수학", "영어", "사회", "과학", "논술"];
   const LEVEL_LIST = ["1~2등급", "2~3등급", "3~4등급"];
 
-  /* ===============================
-     1) 상단 메뉴 & URL 설정
-    
-     =============================== */
   const MENU_DATA = {
     "학원 이용 가이드": [
       {
@@ -170,18 +200,18 @@
         "url": "https://russeldc.megastudy.net/russel/info/notice/notice.asp"
       },
       {
-        "label": "자주하는 질문",
-        "desc": "등록, 수강, 환불 등 FAQ",
+        "label": "자주하는질문(FAQ)",
+        "desc": "등록, 수강, 환불 등 FAQ (챗봇 내 검색/분류 제공)",
         "url": "https://russeldc.megastudy.net/russel/info/qna/faq.asp"
       },
       {
-        "label": "1:1 온라인 상담",
+        "label": "1:1 온라인 상담 바로가기",
         "desc": "온라인 학습·진학 상담 신청",
         "url": "https://russeldc.megastudy.net/russel/info/qna/qna.asp"
       },
       {
-        "label": "설명회 예약/알림",
-        "desc": "설명회 일정 확인 및 알림 신청",
+        "label": "설명회 일정 안내",
+        "desc": "조회 시점부터 2주 내 예정 설명회 자동 안내 + 전체 일정 링크",
         "url": "https://russeldc.megastudy.net/russel/entinfo/entry_pt/enter_pt_list.asp"
       },
       {
@@ -191,25 +221,8 @@
       },
       {
         "label": "오시는 길",
-        "desc": "러셀 대치학원 위치 안내",
+        "desc": "러셀 대치학원 위치 안내(텍스트 안내)",
         "url": "https://russeldc.megastudy.net/russel/info/location.asp"
-      },
-      {
-        "label": "문자 알림 신청",
-        "desc": "학원 문자 알림 신청/관리",
-        "url": "https://russeldc.megastudy.net/russel/entinfo/entry_pt/enter_pt_list.asp"
-      }
-    ],
-    "바른공부 자습전용관": [
-      {
-        "label": "자습전용관 안내",
-        "desc": "바른공부 자습전용관 운영·이용 안내",
-        "url": "https://russeldc.megastudy.net/russel/info/study_hall/study_hall.asp"
-      },
-      {
-        "label": "재학생 특별 혜택",
-        "desc": "재학생 대상 특별 혜택 안내",
-        "url": "https://russeldc.megastudy.net/russel/event/2020/megapass/megapass.asp"
       },
       {
         "label": "주간 식단표",
@@ -217,21 +230,17 @@
         "url": "https://russeldc.megastudy.net/russel/campus_common/campus/weekly_food.asp"
       }
     ],
+
     "모의고사 일정/콘텐츠": [
       {
         "label": "2026년 모의고사 일정",
-        "desc": "2026년 러셀 모의고사 일정 안내",
+        "desc": "2026년 러셀 모의고사 일정 안내(텍스트+링크)",
         "url": "https://russeldc.megastudy.net/russel/entinfo/test_schedule.asp?year=2026"
       },
       {
         "label": "OMEGA 모의고사",
         "desc": "OMEGA 모의고사 소개",
-        "url": "https://russeldc.megastudy.net/event/omega_intro/index.asp"
-      },
-      {
-        "label": "전국 대단위 실전 모의고사",
-        "desc": "전국 대단위 실전 모의고사 안내",
-        "url": "https://russeldc.megastudy.net/event/2025/jdsm/index.asp"
+        "url": "https://russeldc.megastudy.net/intro/2022/omega/index.asp"
       },
       {
         "label": "메대프 모의고사",
@@ -248,11 +257,6 @@
     /* "출강 선생님 안내" 섹션 제거하고,
         아래 "단과 안내" 하위로 옮김 */
     "단과 안내": [
-      {
-        label: "모의고사 구매",
-        desc: "러셀 모의고사 구매",
-        url: "https://russeldc.megastudy.net/russel/online_mock/index.asp"
-      },
       {
         label: "강좌 안내/접수 바로가기",
         desc: "강좌 안내/ 접수 바로가기 소개",
@@ -275,24 +279,37 @@
         url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0025"
       },
       {
-        label: "한국사 선생님",
-        desc: "한국사 출강 선생님 소개",
-        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0049"
+        label: "과학 선생님",
+        desc: "과학 출강 선생님 소개",
+        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0026"
       },
       {
         label: "사회 선생님",
         desc: "사회 출강 선생님 소개",
-        url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0026"
-      },
-      {
-        label: "과학 선생님",
-        desc: "과학 출강 선생님 소개",
         url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0027"
       },
       {
         label: "논술 선생님",
         desc: "논술 출강 선생님 소개",
         url: "https://russeldc.megastudy.net/russel/teacher/teacher.asp?te_les=CD0028"
+      }
+    ],
+
+    "자습전용관 안내": [
+      {
+        "label": "자습전용관 소개",
+        "desc": "자습전용관 운영 및 안내",
+        "url": "https://russeldc.megastudy.net/russel/campus_common/study_only/study_only.asp"
+      },
+      {
+        "label": "자리 배정/변경",
+        "desc": "자리 배정·변경 관련 안내",
+        "url": "https://russeldc.megastudy.net/russel/campus_common/study_only/study_seat.asp"
+      },
+      {
+        "label": "이용 수칙",
+        "desc": "자습전용관 이용 수칙 안내",
+        "url": "https://russeldc.megastudy.net/russel/campus_common/study_only/study_rule.asp"
       }
     ],
 
@@ -334,6 +351,10 @@
   const SHEET_WEBHOOK_URL =
     "https://script.google.com/macros/s/AKfycbyyz-H4DhCk3fRDOJIo55ReRVabSCccHLAmfNbsgBvu8z3IiyUJH10mWDR9Ca371tMM/exec";
 
+  // ✅ FAQ/설명회 데이터 제공(GAS) API Base URL
+  const PUBLIC_API_BASE =
+    "https://script.google.com/macros/s/AKfycbwFLJRXZ7zTQuP1GaeMG5f4ZhO_Mz627n8U-PP_P94Aj-UiwBuE2SMZIRAKx_Am4Tv2/exec";
+
   // [우석 추가] 현재 수강중 강좌 목록 (단과 환불 시 선택용)
   const currentCoursesData = []; // 필요하면 나중에 채우기
 
@@ -344,16 +365,27 @@
     const bubble = document.createElement("div");
     bubble.className = "bubble";
     bubble.textContent = text;
-    wrap.appendChild(bubble);
+
+    wrap.appendChild(풍선껌);
 
     if (linksHtml) {
-      const box = document.createElement("div");
-      box.className = "link-list";
-      box.innerHTML = linksHtml;
-      bubble.appendChild(document.createElement("br"));
-      bubble.appendChild(box);
+      const links = document.createElement("div");
+      links.className = "links";
+      links.innerHTML = linksHtml;
+      bubble.appendChild(links);
     }
 
+    chat.appendChild(wrap);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function addUserMessage(text) {
+    const wrap = document.createElement("div");
+    wrap.className = "msg msg-user";
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.textContent = text;
+    wrap.appendChild(풍선껌);
     chat.appendChild(wrap);
     chat.scrollTop = chat.scrollHeight;
   }
@@ -391,7 +423,7 @@
       btn.textContent = item.label;
       btn.title = item.desc;
 
-      // ✅ "학원 이용 가이드"의 "오시는 길"은 설명 + 링크만 제공(자동이동 X)
+      // ✅ "학원 이용 가이드"의 "오시는 길"은 텍스트 안내만 제공(자동이동/바로가기 X)
       if (menuName === "학원 이용 가이드" && item.label === "오시는 길") {
         btn.onclick = () => {
           const explain =
@@ -402,13 +434,8 @@
             "  [별관] 서울시 강남구 삼성로 155, 대치 퍼스트 빌딩\n" +
             "• 주차장 위치 안내\n" +
             "  풍림프라자 빌딩 뒷 편에 위치(별관 주차 불가)\n\n" +
-            "아래 링크에서 지도로 자세히 확인하실 수 있습니다.";
-
-          const html =
-            `홈페이지에서 자세히 확인하겠습니까?\n` +
-            `<a href="${item.url}" target="_blank">오시는 길 페이지 열기</a>`;
-
-          addBotMessage(explain, html);
+            "※ 위치/운영 정보는 변동될 수 있어, 방문 전 데스크(입학처) 문의를 권장합니다.";
+          addBotMessage(explain);
         };
       }
       // ✅ "모의고사 일정/콘텐츠"의 "2026년 모의고사 일정"은 올해 일정 안내 + 링크 제공(자동이동 X)
@@ -441,6 +468,20 @@
           addBotMessage(scheduleText, html);
         };
       }
+
+      // ✅ "학원 이용 가이드"의 "자주하는질문(FAQ)"은 GAS에서 FAQ를 불러와 분류/검색/답변을 제공합니다.
+      else if (menuName === "학원 이용 가이드" && (item.label === "자주하는질문(FAQ)" || item.label === "자주하는 질문")) {
+        btn.onclick = async () => {
+          await openFAQ();
+        };
+      }
+      // ✅ "학원 이용 가이드"의 "설명회 일정 안내"는 조회 시점부터 2주 내 일정을 자동으로 불러와 텍스트로 안내합니다.
+      else if (menuName === "학원 이용 가이드" && (item.label === "설명회 일정 안내" || item.label === "설명회 예약/알림")) {
+        btn.onclick = async () => {
+          await showUpcomingSeminars(14, item.url || "https://russeldc.megastudy.net/russel/entinfo/entry_pt/enter_pt_list.asp");
+        };
+      }
+
       // [우석 추가] 나의 수강정보 메뉴 내 특수 동작 분기
       else if (menuName === "나의 수강정보" && item.label === "수강정보") {
         btn.onclick = () => handleCourseInfo();
@@ -461,6 +502,15 @@
       btnList.appendChild(btn);
     });
 
+    const backBtn = document.createElement("button");
+    backBtn.className = "chip-btn";
+    backBtn.textContent = "◀ 이전으로";
+    backBtn.onclick = () => {
+      addBotMessage("이전 메뉴로 돌아갑니다.");
+      renderMainButtons();
+    };
+    btnList.appendChild(backBtn);
+
     const homeBtn = document.createElement("button");
     homeBtn.className = "chip-btn";
     homeBtn.textContent = "◀ 처음으로";
@@ -471,81 +521,98 @@
     btnList.appendChild(homeBtn);
   }
 
+
   /* ===============================
-     3) 성적별 수업 추천 로직
+     2-1) FAQ/설명회(GAS) 연동
+     - FAQ 전체:  ?mode=faq_all
+     - 설명회:    ?mode=seminars&days=14
      =============================== */
 
-  function normalizeSubject(rawSubject) {
-    const s = String(rawSubject || "").replace(/\s/g, "");
+  let FAQ_DATA = [];
+  let FAQ_LOADED = false;
 
-    const mathSet = ["수1", "수2", "미적", "확통", "공통", "공통,미적", "미적,공통"];
-    if (mathSet.includes(s)) return "수학";
-
-    if (s === "국어") return "국어";
-
-    if (["사회", "생활과윤리", "한국사"].includes(s)) return "사회";
-
-    if (["물리학1", "생명과학1"].includes(s)) return "과학";
-
-    return s;
+  async function loadFAQOnce() {
+    if (FAQ_LOADED) return;
+    const url = `${PUBLIC_API_BASE}?mode=faq_all`;
+    const res = await fetch(url, { cache: "no-store" });
+    const data = await res.json();
+    FAQ_DATA = Array.isArray(data) ? data : [];
+    FAQ_LOADED = true;
   }
 
-  function recommendCourses(subject, levelText) {
-    const targetSubject = String(subject || "").replace(/\s/g, "");
-
-    return COURSE_DATA.filter(item => {
-      const subj = normalizeSubject(item.subject);
-      const lvl  = String(item.level_text || "").trim();
-      return subj === targetSubject && lvl === levelText;
+  function groupFAQByCategory(list) {
+    const m = {};
+    list.forEach(x => {
+      const c = String(x.category || "기타").trim() || "기타";
+      if (!m[c]) m[c] = [];
+      m[c].push(x);
     });
+    return m;
   }
 
-  function showRecommendResult(subject, levelText) {
-    if (!COURSE_LOADED && !COURSE_LOAD_FAILED && COURSE_DATA.length === 0) {
-      addBotMessage("시간표 데이터가 아직 로딩되지 않았습니다.\n잠시 후 다시 성적별 수업 추천을 눌러 주세요.");
+  async function openFAQ() {
+    addBotMessage("자주하는질문(FAQ) 데이터를 불러오는 중입니다...");
+    try {
+      await loadFAQOnce();
+    } catch (e) {
+      FAQ_DATA = [];
+      FAQ_LOADED = true;
+    }
+
+    if (!FAQ_DATA || FAQ_DATA.length === 0) {
+      addBotMessage("FAQ 데이터를 불러오지 못했습니다.\n잠시 후 다시 시도해 주세요.");
+      // 버튼은 학원 이용 가이드로 복귀
+      btnTitle.textContent = "FAQ";
+      btnList.innerHTML = "";
+      const backBtn = document.createElement("button");
+      backBtn.className = "chip-btn";
+      backBtn.textContent = "◀ 학원 이용 가이드로";
+      backBtn.onclick = () => openMenu("학원 이용 가이드");
+      btnList.appendChild(backBtn);
+
+      const homeBtn = document.createElement("button");
+      homeBtn.className = "chip-btn";
+      homeBtn.textContent = "◀ 처음으로";
+      homeBtn.onclick = () => renderMainButtons();
+      btnList.appendChild(homeBtn);
       return;
     }
 
-    if (COURSE_LOAD_FAILED) {
-      addBotMessage(
-        "시간표 데이터(russel.json)를 불러오는 데 실패했습니다.\n" +
-        "index.html과 russel.json이 같은 폴더에 있는지, 그리고 GitHub Pages 같은 http 환경에서 열었는지 확인해 주세요."
-      );
-      return;
-    }
+    const grouped = groupFAQByCategory(FAQ_DATA);
+    const categories = Object.keys(grouped);
 
-    const list = recommendCourses(subject, levelText);
+    addBotMessage(
+      "『자주하는질문(FAQ)』입니다.\n\n" +
+      "1) 분류를 선택하거나\n" +
+      "2) 키워드 검색으로 관련 질문을 찾을 수 있어요."
+    );
 
-    let text = `『${subject} / ${levelText}』 수업 추천입니다.\n\n`;
-
-    if (list.length === 0) {
-      text += "해당 조건의 강좌가 없습니다.";
-    } else {
-      list.forEach((c, idx) => {
-        text += `${idx + 1}. ${c.title} - ${c.teacher}\n`;
-        text += `   요일: ${c.day}, 시간: ${c.time_raw}\n\n`;
-      });
-    }
-
-    addBotMessage(text.trim());
-    renderRecommendResultButtons(subject, levelText);
+    renderFAQCategories(categories, grouped);
   }
 
-  function renderRecommendResultButtons(subject, levelText) {
-    btnTitle.textContent = `${subject} / ${levelText} 추천 결과`;
+  function renderFAQCategories(categories, grouped) {
+    btnTitle.textContent = "FAQ 분류 선택";
     btnList.innerHTML = "";
 
-    const againBtn = document.createElement("button");
-    againBtn.className = "chip-btn";
-    againBtn.textContent = "다른 등급 보기";
-    againBtn.onclick = () => renderRecommendLevelButtons(subject);
-    btnList.appendChild(againBtn);
+    categories.forEach(cat => {
+      const btn = document.createElement("button");
+      btn.className = "chip-btn";
+      btn.textContent = `${cat} (${grouped[cat].length})`;
+      btn.onclick = () => renderFAQQuestions(cat, grouped[cat], categories, grouped);
+      btnList.appendChild(btn);
+    });
 
-    const subjBtn = document.createElement("button");
-    subjBtn.className = "chip-btn";
-    subjBtn.textContent = "과목 다시 선택";
-    subjBtn.onclick = () => renderRecommendSubjectButtons();
-    btnList.appendChild(subjBtn);
+    const searchBtn = document.createElement("button");
+    searchBtn.className = "chip-btn";
+    searchBtn.textContent = "🔎 키워드 검색";
+    searchBtn.onclick = () => promptFAQSearch(categories, grouped);
+    btnList.appendChild(searchBtn);
+
+    const backBtn = document.createElement("button");
+    backBtn.className = "chip-btn";
+    backBtn.textContent = "◀ 학원 이용 가이드로";
+    backBtn.onclick = () => openMenu("학원 이용 가이드");
+    btnList.appendChild(backBtn);
 
     const homeBtn = document.createElement("button");
     homeBtn.className = "chip-btn";
@@ -554,15 +621,297 @@
     btnList.appendChild(homeBtn);
   }
 
+  function renderFAQQuestions(cat, list, categories, grouped) {
+    addBotMessage(`『${cat}』 질문 목록입니다.\n원하는 질문을 선택해 주세요.`);
+
+    btnTitle.textContent = `FAQ - ${cat}`;
+    btnList.innerHTML = "";
+
+    list.slice(0, 30).forEach(item => {
+      const btn = document.createElement("button");
+      btn.className = "chip-btn";
+      btn.textContent = item.q;
+      btn.onclick = () => showFAQAnswer(item, cat, list, categories, grouped);
+      btnList.appendChild(btn);
+    });
+
+    const searchBtn = document.createElement("button");
+    searchBtn.className = "chip-btn";
+    searchBtn.textContent = "🔎 키워드 검색";
+    searchBtn.onclick = () => promptFAQSearch(categories, grouped);
+    btnList.appendChild(searchBtn);
+
+    const backBtn = document.createElement("button");
+    backBtn.className = "chip-btn";
+    backBtn.textContent = "◀ 분류로";
+    backBtn.onclick = () => renderFAQCategories(categories, grouped);
+    btnList.appendChild(backBtn);
+
+    const homeBtn = document.createElement("button");
+    homeBtn.className = "chip-btn";
+    homeBtn.textContent = "◀ 처음으로";
+    homeBtn.onclick = () => renderMainButtons();
+    btnList.appendChild(homeBtn);
+  }
+
+  function showFAQAnswer(item, cat, list, categories, grouped) {
+    const q = item.q || "";
+    const a = item.a || "";
+    addBotMessage(`Q) ${q}\n\nA) ${a}`);
+
+    btnTitle.textContent = "FAQ 답변";
+    btnList.innerHTML = "";
+
+    const moreBtn = document.createElement("button");
+    moreBtn.className = "chip-btn";
+    moreBtn.textContent = "다른 질문 보기";
+    moreBtn.onclick = () => renderFAQQuestions(cat, list, categories, grouped);
+    btnList.appendChild(moreBtn);
+
+    const searchBtn = document.createElement("button");
+    searchBtn.className = "chip-btn";
+    searchBtn.textContent = "🔎 키워드 검색";
+    searchBtn.onclick = () => promptFAQSearch(categories, grouped);
+    btnList.appendChild(searchBtn);
+
+    const catBtn = document.createElement("button");
+    catBtn.className = "chip-btn";
+    catBtn.textContent = "◀ 분류로";
+    catBtn.onclick = () => renderFAQCategories(categories, grouped);
+    btnList.appendChild(catBtn);
+
+    const homeBtn = document.createElement("button");
+    homeBtn.className = "chip-btn";
+    homeBtn.textContent = "◀ 처음으로";
+    homeBtn.onclick = () => renderMainButtons();
+    btnList.appendChild(homeBtn);
+  }
+
+  function promptFAQSearch(categories, grouped) {
+    const keyword = (prompt("검색할 키워드를 입력해 주세요.\n(예: 환불, 등록, 상담, 운영시간 등)") || "").trim();
+    if (!keyword) return;
+
+    // 전체 리스트로 합침
+    const all = [];
+    Object.values(grouped).forEach(arr => all.push(...arr));
+    const k = keyword.toLowerCase();
+
+    const matches = all.filter(x =>
+      (x.q && String(x.q).toLowerCase().includes(k)) ||
+      (x.a && String(x.a).toLowerCase().includes(k))
+    );
+
+    if (matches.length === 0) {
+      addBotMessage(`'${keyword}' 관련 FAQ를 찾지 못했습니다.\n다른 키워드로 다시 시도해 주세요.`);
+      return;
+    }
+
+    addBotMessage(`'${keyword}' 관련 질문 ${matches.length}개를 찾았습니다.\n원하는 질문을 선택해 주세요.`);
+
+    btnTitle.textContent = "FAQ 검색 결과";
+    btnList.innerHTML = "";
+
+    matches.slice(0, 20).forEach(item => {
+      const btn = document.createElement("button");
+      btn.className = "chip-btn";
+      btn.textContent = item.q;
+      btn.onclick = () => showFAQAnswer(item, item.category || "기타", matches, categories, grouped);
+      btnList.appendChild(btn);
+    });
+
+    const againBtn = document.createElement("button");
+    againBtn.className = "chip-btn";
+    againBtn.textContent = "🔎 다시 검색";
+    againBtn.onclick = () => promptFAQSearch(categories, grouped);
+    btnList.appendChild(againBtn);
+
+    const catBtn = document.createElement("button");
+    catBtn.className = "chip-btn";
+    catBtn.textContent = "◀ 분류로";
+    catBtn.onclick = () => renderFAQCategories(categories, grouped);
+    btnList.appendChild(catBtn);
+
+    const homeBtn = document.createElement("button");
+    homeBtn.className = "chip-btn";
+    homeBtn.textContent = "◀ 처음으로";
+    homeBtn.onclick = () => renderMainButtons();
+    btnList.appendChild(homeBtn);
+  }
+
+  async function showUpcomingSeminars(days = 14, listUrl = "") {
+    addBotMessage("조회 시점 기준 2주 이내 예정된 설명회를 불러오는 중입니다...");
+
+    const api = `${PUBLIC_API_BASE}?mode=seminars&days=${encodeURIComponent(days)}&aca=CD0001`;
+
+    try {
+      const res = await fetch(api, { cache: "no-store" });
+      const data = await res.json();
+
+      if (!Array.isArray(data) || data.length === 0) {
+        addBotMessage(
+          "📌 2주 이내 예정된 설명회가 없거나, 정보를 불러오지 못했습니다.\n" +
+          "아래 링크에서 전체 설명회 일정을 확인해 주세요.",
+          listUrl ? `<a href="${listUrl}" target="_blank">전체 설명회 일정 바로가기</a>` : ""
+        );
+        return;
+      }
+
+      let msg = "📌 2주 이내 예정 설명회 안내\n\n";
+      data.slice(0, 12).forEach((x, i) => {
+        msg += `${i + 1}) ${x.title || "일정"}\n`;
+
+        const when =
+          (x.dateISO ? x.dateISO : "") +
+          (x.timeText ? ` ${x.timeText}` : "") +
+          (!x.dateISO && x.dateText ? `${x.dateText}` : "");
+
+        msg += `   일시: ${when.trim() || x.dateText || "미정"}\n\n`
+      });
+
+      addBotMessage(
+        msg.trim(),
+        listUrl ? `<a href="${listUrl}" target="_blank">전체 설명회 일정 바로가기</a>` : ""
+      );
+    } catch (e) {
+      addBotMessage(
+        "설명회 정보를 불러오지 못했습니다.\n아래 링크에서 확인해 주세요.",
+        listUrl ? `<a href="${listUrl}" target="_blank">전체 설명회 일정 바로가기</a>` : ""
+      );
+    }
+  }
+
+  /* ===============================
+     3) 성적별 수업 추천 로직
+     - 추천 기준: ① 난이도(권장등급) ② 요일(시간) ③ 요일+난이도 조합
+     - 수학 선택과목 키워드(수1/수2/미적/확통/기하/공통 등)도 "수학"으로 통합 인식
+     =============================== */
+
+  const RECO_MODE_LIST = [
+    { key: "LEVEL", label: "난이도(등급) 기준" },
+    { key: "DAYTIME", label: "요일(시간) 기준" },
+    { key: "BOTH", label: "요일+난이도 조합" }
+  ];
+
+  const DAYTIME_LIST = [
+    "월(오전)","월(오후)","월(저녁)",
+    "화(오전)","화(오후)","화(저녁)",
+    "수(오전)","수(오후)","수(저녁)",
+    "목(오전)","목(오후)","목(저녁)",
+    "금(오전)","금(오후)","금(저녁)",
+    "토(오전)","토(오후)","토(저녁)",
+    "일(오전)","일(오후)","일(저녁)"
+  ];
+
+  function normalizeSubject(rawSubject) {
+    const s = String(rawSubject || "").replace(/\s/g, "");
+
+    // ✅ 수학 선택과목/표기 통합
+    const mathSet = [
+      "수1","수2","수학1","수학2","미적","미적분","확통","확률과통계","기하","공통","수학",
+      "공통,미적","미적,공통","공통+미적","미적+공통"
+    ];
+    if (mathSet.includes(s)) return "수학";
+
+    // 국어 표기 통합
+    if (["국어","언매","화작","언어와매체","화법과작문"].includes(s)) return "국어";
+
+    // 사회/과학 일부 과목 확장(필요 시 계속 추가 가능)
+    if (["사회","생활과윤리","윤리","한국사","사문","사회문화","정법","정치와법","경제","세계사","동아시아사"].includes(s)) return "사회";
+    if (["과학","물리학1","물리1","물리","화학1","화학","생명과학1","생명","지구과학1","지구"].includes(s)) return "과학";
+
+    if (["영어"].includes(s)) return "영어";
+    if (["논술"].includes(s)) return "논술";
+
+    return s;
+  }
+
+  function hasDayTimeFields() {
+    // russel.json에 요일/시간 정보가 들어있어야 DAYTIME/BOTH 추천 가능
+    return COURSE_DATA.some(x => x.day || x.요일 || x.time_raw || x.time || x.시간);
+  }
+
+  function matchLevel(item, levelText) {
+    // level_text 우선, 없으면 level/등급/grade도 시도
+    const lvl = String(item.level_text || item.level || item.등급 || item.grade || "").trim();
+    if (!levelText) return true;
+    if (!lvl) return false;
+    return lvl === levelText;
+  }
+
+  function matchDayTime(item, dayTimeText) {
+    if (!dayTimeText) return true;
+
+    const day = String(item.day || item.요일 || "");
+    const time = String(item.time_raw || item.time || item.시간 || "");
+
+    // 데이터가 없으면 매칭 불가
+    if (!day && !time) return false;
+
+    // 입력: "월(오전)" 형태
+    const m = dayTimeText.match(/^(.+)\((.+)\)$/);
+    if (!m) return true;
+
+    const d = m[1];
+    const part = m[2];
+
+    // 요일 포함 여부(느슨하게)
+    if (day && !day.includes(d)) return false;
+
+    // 시간대 판정(시간 문자열에서 첫 시:분을 찾음)
+    const hh = (time.match(/(\d{1,2})\s*:/) || [])[1];
+    if (!hh) return true;
+
+    const h = Number(hh);
+    if (part === "오전") return h < 12;
+    if (part === "오후") return h >= 12 && h < 18;
+    return h >= 18; // 저녁
+  }
+
+  function recommendCoursesByMode(subject, levelText, dayTimeText, modeKey) {
+    const targetSubject = String(subject || "").replace(/\s/g, "");
+    let list = COURSE_DATA.filter(item => normalizeSubject(item.subject) === targetSubject);
+
+    if (modeKey === "LEVEL") {
+      list = list.filter(item => matchLevel(item, levelText));
+    } else if (modeKey === "DAYTIME") {
+      list = list.filter(item => matchDayTime(item, dayTimeText));
+    } else if (modeKey === "BOTH") {
+      list = list.filter(item => matchLevel(item, levelText) && matchDayTime(item, dayTimeText));
+    }
+    return list;
+  }
+
   function openRecommendFlow() {
     addBotMessage(
       "성적별 수업 추천입니다.\n" +
-      "원하시는 과목을 선택해주세요."
+      "추천 기준을 선택해 주세요."
     );
-    renderRecommendSubjectButtons();
+    renderRecommendModeButtons();
   }
 
-  function renderRecommendSubjectButtons() {
+  function renderRecommendModeButtons() {
+    btnTitle.textContent = "추천 기준 선택";
+    btnList.innerHTML = "";
+
+    RECO_MODE_LIST.forEach(m => {
+      const btn = document.createElement("button");
+      btn.className = "chip-btn";
+      btn.textContent = m.label;
+      btn.onclick = () => renderRecommendSubjectButtons(m.key);
+      btnList.appendChild(btn);
+    });
+
+    const homeBtn = document.createElement("button");
+    homeBtn.className = "chip-btn";
+    homeBtn.textContent = "◀ 처음으로";
+    homeBtn.onclick = () => {
+      addBotMessage("처음 메뉴로 돌아갑니다.");
+      renderMainButtons();
+    };
+    btnList.appendChild(homeBtn);
+  }
+
+  function renderRecommendSubjectButtons(modeKey) {
     btnTitle.textContent = "과목 선택";
     btnList.innerHTML = "";
 
@@ -570,9 +919,29 @@
       const btn = document.createElement("button");
       btn.className = "chip-btn";
       btn.textContent = sub;
-      btn.onclick = () => renderRecommendLevelButtons(sub);
+      btn.onclick = () => {
+        if (modeKey === "LEVEL") return renderRecommendLevelButtons(modeKey, sub, null);
+
+        if (!hasDayTimeFields()) {
+          addBotMessage(
+            "현재 시간표 데이터(russel.json)에 요일/시간 정보가 없어\n" +
+            "‘요일(시간)’ 기준 추천은 사용할 수 없습니다.\n" +
+            "난이도(등급) 기준으로 안내할게요."
+          );
+          return renderRecommendLevelButtons("LEVEL", sub, null);
+        }
+
+        // DAYTIME / BOTH
+        return renderRecommendDayTimeButtons(modeKey, sub);
+      };
       btnList.appendChild(btn);
     });
+
+    const backBtn = document.createElement("button");
+    backBtn.className = "chip-btn";
+    backBtn.textContent = "◀ 기준 다시 선택";
+    backBtn.onclick = () => renderRecommendModeButtons();
+    btnList.appendChild(backBtn);
 
     const homeBtn = document.createElement("button");
     homeBtn.className = "chip-btn";
@@ -581,135 +950,123 @@
     btnList.appendChild(homeBtn);
   }
 
-  function renderRecommendLevelButtons(subject) {
-    btnTitle.textContent = subject + " / 등급 선택";
+  function renderRecommendDayTimeButtons(modeKey, subject) {
+    btnTitle.textContent = subject + " / 요일(시간) 선택";
     btnList.innerHTML = "";
 
-    LEVEL_LIST.forEach(lv => {
+    DAYTIME_LIST.forEach(dt => {
       const btn = document.createElement("button");
       btn.className = "chip-btn";
-      btn.textContent = lv;
-      btn.onclick = () => showRecommendResult(subject, lv);
+      btn.textContent = dt;
+      btn.onclick = () => {
+        if (modeKey === "DAYTIME") return showRecommendResult(modeKey, subject, null, dt);
+        // BOTH면 등급 선택으로 이동
+        return renderRecommendLevelButtons(modeKey, subject, dt);
+      };
       btnList.appendChild(btn);
     });
 
     const backBtn = document.createElement("button");
     backBtn.className = "chip-btn";
     backBtn.textContent = "◀ 과목 다시 선택";
-    backBtn.onclick = () => renderRecommendSubjectButtons();
+    backBtn.onclick = () => renderRecommendSubjectButtons(modeKey);
     btnList.appendChild(backBtn);
-  }
-
-  /* ===============================
-     4) 나의 수강정보 / 환불 로직 (우석 추가)
-     =============================== */
-
-  function handleCourseInfo() {
-    const currentCourses = [];
-    const pastCourses = [];
-
-    if (currentCourses.length === 0) {
-      addBotMessage("📌 현재 수강중인 강좌가 없습니다.");
-    } else {
-      let msg = "📌 현재 수강중인 강좌 목록:\n\n";
-      currentCourses.forEach((c, i) => msg += `${i + 1}. ${c}\n`);
-      addBotMessage(msg);
-    }
-
-    if (pastCourses.length === 0) {
-      addBotMessage("📚 지난 수강내역이 없습니다.");
-    } else {
-      let msg = "📚 지난 수강내역:\n\n";
-      pastCourses.forEach((c, i) => msg += `${i + 1}. ${c}\n`);
-      addBotMessage(msg);
-    }
-  }
-
-  function handleWaitingInfo() {
-    const waitingList = [];
-
-    if (waitingList.length === 0) {
-      addBotMessage("현재 대기중인 강좌가 없습니다.");
-      return;
-    }
-
-    let msg = "📋 대기정보 목록\n\n";
-    waitingList.forEach((item, i) => {
-      msg += `${i + 1}) 학반/강좌: ${item.lecture}\n`;
-      msg += `   담임/강사: ${item.teacher}\n`;
-      msg += `   대기번호: ${item.waitNo}번\n\n`;
-    });
-    addBotMessage(msg);
-  }
-
-  function handlePaymentInfo() {
-    const paymentList = [];
-
-    if (paymentList.length === 0) {
-      addBotMessage("💳 결제내역이 없습니다.");
-      return;
-    }
-
-    let msg = "💳 결제내역\n\n";
-    paymentList.forEach((p, i) => {
-      msg += `${i + 1}) 학원: ${p.campus}\n`;
-      msg += `   결제일자: ${p.date}\n`;
-      msg += `   구매내역: ${p.item}\n`;
-      msg += `   결제금액: ${p.amount}\n`;
-      msg += `   결제수단: ${p.method}\n`;
-      msg += `   상태: ${p.status}\n\n`;
-    });
-    addBotMessage(msg);
-  }
-
-  function renderRefundSubMenu() {
-    addBotMessage("원하시는 환불 유형을 선택해 주세요.");
-
-    btnTitle.textContent = "환불신청 세부 메뉴";
-    btnList.innerHTML = "";
-
-    const subMenus = [
-      { label: "단과환불 신청" },
-      { label: "교재환불 신청" },
-      { label: "바자관환불 신청" }
-    ];
-
-    subMenus.forEach(sub => {
-      const b = document.createElement("button");
-      b.className = "chip-btn";
-      b.textContent = sub.label;
-
-      if (sub.label === "단과환불 신청") {
-        b.onclick = () => handleRefundSingle();
-      } else {
-        b.onclick = () => addBotMessage(`${sub.label} 기능은 추후 오픈 예정입니다.`);
-      }
-      btnList.appendChild(b);
-    });
 
     const homeBtn = document.createElement("button");
     homeBtn.className = "chip-btn";
-    homeBtn.textContent = "◀ 나의 수강정보로";
-    homeBtn.onclick = () => openMenu("나의 수강정보");
+    homeBtn.textContent = "◀ 처음으로";
+    homeBtn.onclick = () => renderMainButtons();
     btnList.appendChild(homeBtn);
   }
 
-  function getStudentInfo() {
-    let name = localStorage.getItem("studentName");
-    let studentId = localStorage.getItem("studentId");
+  function renderRecommendLevelButtons(modeKey, subject, dayTimeText) {
+    btnTitle.textContent = dayTimeText ? `${subject} / ${dayTimeText} / 등급 선택` : `${subject} / 등급 선택`;
+    btnList.innerHTML = "";
 
-    if (!name || !studentId) {
-      name = prompt("학생 이름을 입력해 주세요:");
-      studentId = prompt("재원생 학번(6~7자리)을 입력해 주세요:");
+    LEVEL_LIST.forEach(lv => {
+      const btn = document.createElement("button");
+      btn.className = "chip-btn";
+      btn.textContent = lv;
+      btn.onclick = () => showRecommendResult(modeKey, subject, lv, dayTimeText);
+      btnList.appendChild(btn);
+    });
 
-      if (!name || !studentId) {
-        alert("이름과 학번 입력이 필요합니다.");
-        return null;
-      }
+    const backBtn = document.createElement("button");
+    backBtn.className = "chip-btn";
+    backBtn.textContent = dayTimeText ? "◀ 요일 다시 선택" : "◀ 과목 다시 선택";
+    backBtn.onclick = () => {
+      if (dayTimeText) return renderRecommendDayTimeButtons(modeKey, subject);
+      return renderRecommendSubjectButtons(modeKey);
+    };
+    btnList.appendChild(backBtn);
 
-      localStorage.setItem("studentName", name);
-      localStorage.setItem("studentId", studentId);
+    const homeBtn = document.createElement("button");
+    homeBtn.className = "chip-btn";
+    homeBtn.textContent = "◀ 처음으로";
+    homeBtn.onclick = () => renderMainButtons();
+    btnList.appendChild(homeBtn);
+  }
+
+  function showRecommendResult(modeKey, subject, levelText, dayTimeText) {
+    if (!COURSE_LOADED && !COURSE_LOAD_FAILED && COURSE_DATA.length === 0) {
+      addBotMessage("시간표 데이터가 아직 로딩되지 않았습니다.\n잠시 후 다시 성적별 수업 추천을 눌러 주세요.");
+      return;
     }
+
+    if (COURSE_LOAD_FAILED) {
+      addBotMessage(
+        "시간표 데이터(russel.json) 로딩에 실패했습니다.\n\n" +
+        "✅ 확인사항\n" +
+        "1) index.html과 russel.json이 같은 폴더에 있는지\n" +
+        "2) 파일을 더블클릭이 아니라 Live Server/서버 환경에서 열었는지\n" +
+        "3) russel.json이 유효한 JSON인지"
+      );
+      return;
+    }
+
+    const list = recommendCoursesByMode(subject, levelText, dayTimeText, modeKey);
+
+    let head = `『${subject}』 추천 결과\n\n`;
+    if (modeKey === "LEVEL") head = `『${subject} / ${levelText}』 추천 결과\n\n`;
+    if (modeKey === "DAYTIME") head = `『${subject} / ${dayTimeText}』 추천 결과\n\n`;
+    if (modeKey === "BOTH") head = `『${subject} / ${dayTimeText} / ${levelText}』 추천 결과\n\n`;
+
+    let msg = head;
+
+    if (!list || list.length === 0) {
+      msg += "해당 조건의 강좌가 없습니다.";
+      addBotMessage(msg);
+      return;
+    }
+
+    list.slice(0, 15).forEach((item, i) => {
+      const lecture = item.lecture || item.title || item.강좌명 || "";
+      const teacher = item.teacher || item.선생님 || "";
+      const lvl = item.level_text || item.level || item.등급 || "";
+      const day = item.day || item.요일 || "";
+      const time = item.time_raw || item.time || item.시간 || "";
+
+      msg += `${i + 1}. ${lecture}${teacher ? " - " + teacher : ""}\n`;
+      if (lvl) msg += `   권장등급: ${lvl}\n`;
+      if (day || time) msg += `   요일: ${day || "-"} / 시간: ${time || "-"}\n`;
+      msg += "\n";
+    });
+
+    addBotMessage(msg.trim());
+  }
+
+
+  /* ===============================
+     4) 나의 수강정보 / 환불 처리(우석 추가)
+     =============================== */
+
+  function extractNameAndId(input) {
+    // 입력 예: "홍길동 12345678"
+    const parts = String(input || "").trim().split(/\s+/);
+    if (parts.length < 2) return null;
+    const studentId = parts[parts.length - 1];
+    const name = parts.slice(0, -1).join(" ");
+    if (!name || !studentId) return null;
     return { name, studentId };
   }
 
@@ -725,60 +1082,124 @@
   }
 
   function handleRefundSingle() {
-    const student = getStudentInfo();
-    if (!student) return;
+    const raw = prompt("환불 신청자 성함과 학번을 입력해주세요.\n예) 홍길동 12345678");
+    if (!raw) return;
+    const student = extractNameAndId(raw);
+    if (!student) {
+      addBotMessage("입력 형식이 올바르지 않습니다.\n예) 홍길동 12345678");
+      return;
+    }
+    const rawCourse = prompt("환불할 강좌명을 입력해주세요.\n예) 국어 OOO / 수학 OOO 등");
+    if (!rawCourse) return;
+    addUserMessage(`[환불신청(단과)]\n${student.name} (${student.studentId})\n강좌: ${rawCourse}`);
+    addBotMessage("환불 신청이 접수되었습니다.\n담당자가 확인 후 처리 안내드리겠습니다.");
 
-    const courseList = currentCoursesData || [];
+    sendRefundToSheet("single", student.name, student.studentId, [rawCourse]);
+  }
 
-    if (courseList.length === 0) {
-      addBotMessage("📌 현재 수강중인 강좌가 없습니다.");
+  function handleRefundMulti() {
+    const raw = prompt("환불 신청자 성함과 학번을 입력해주세요.\n예) 홍길동 12345678");
+    if (!raw) return;
+    const student = extractNameAndId(raw);
+    if (!student) {
+      addBotMessage("입력 형식이 올바르지 않습니다.\n예) 홍길동 12345678");
       return;
     }
 
-    addBotMessage("환불 신청할 강좌를 선택해 주세요.\n(여러 과목 선택 가능)");
+    // 현재 수강중 강좌 목록이 있다면 선택 UI로, 없으면 입력받기
+    let courses = [];
+    if (currentCoursesData && currentCoursesData.length > 0) {
+      const pick = prompt("환불할 강좌 번호를 콤마로 입력해주세요.\n" +
+        currentCoursesData.map((c, i) => `${i+1}) ${c}`).join("\n") +
+        "\n\n예) 1,3,4");
+      if (!pick) return;
+      const nums = pick.split(",").map(x => Number(x.trim())).filter(n => n >= 1 && n <= currentCoursesData.length);
+      courses = nums.map(n => currentCoursesData[n-1]);
+    } else {
+      const rawCourses = prompt("환불할 강좌명을 여러 개 입력해주세요.\n각 강좌는 줄바꿈으로 구분\n예)\n국어 OOO\n수학 OOO\n영어 OOO");
+      if (!rawCourses) return;
+      courses = rawCourses.split("\n").map(x => x.trim()).filter(Boolean);
+    }
 
-    btnTitle.textContent = "단과환불 신청 - 강좌 선택";
-    btnList.innerHTML = "";
+    addUserMessage(`[환불신청(복수)]\n${student.name} (${student.studentId})\n강좌:\n- ${courses.join("\n- ")}`);
+    addBotMessage("환불 신청이 접수되었습니다.\n담당자가 확인 후 처리 안내드리겠습니다.");
 
-    courseList.forEach(course => {
-      const label = document.createElement("label");
-      label.style.display = "flex";
-      label.style.alignItems = "center";
-      label.style.gap = "6px";
-      label.style.fontSize = "12px";
-
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.value = course;
-
-      label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(course));
-      btnList.appendChild(label);
-    });
-
-    const okBtn = document.createElement("button");
-    okBtn.className = "chip-btn";
-    okBtn.textContent = "선택 완료";
-    okBtn.style.marginTop = "10px";
-
-    okBtn.onclick = () => {
-      const selected = [...btnList.querySelectorAll("input[type=checkbox]:checked")].map(x => x.value);
-
-      if (selected.length === 0) {
-        addBotMessage("선택된 강좌가 없습니다.");
-        return;
-      }
-
-      addBotMessage(`총 ${selected.length}개 강좌 환불 신청이 완료되었습니다.`);
-      sendRefundToSheet("single", student.name, student.studentId, selected);
-    };
-
-    btnList.appendChild(okBtn);
+    sendRefundToSheet("multi", student.name, student.studentId, courses);
   }
 
-  /* ===============================
-     5) 초기 실행
-     =============================== */
+  function handleRefundBazagwan() {
+    const raw = prompt("환불 신청자 성함과 학번을 입력해주세요.\n예) 홍길동 12345678");
+    if (!raw) return;
+    const student = extractNameAndId(raw);
+    if (!student) {
+      addBotMessage("입력 형식이 올바르지 않습니다.\n예) 홍길동 12345678");
+      return;
+    }
+    addUserMessage(`[환불신청(바자관)]\n${student.name} (${student.studentId})`);
+    addBotMessage("바자관 환불 신청이 접수되었습니다.\n담당자가 확인 후 처리 안내드리겠습니다.");
+
+    sendRefundToSheet("bazagwan", student.name, student.studentId, []);
+  }
+
+  function renderRefundSubMenu() {
+    addBotMessage("환불 신청 메뉴입니다.\n원하시는 항목을 선택해 주세요.");
+
+    btnTitle.textContent = "환불신청";
+    btnList.innerHTML = "";
+
+    const b1 = document.createElement("button");
+    b1.className = "chip-btn";
+    b1.textContent = "단과 환불신청";
+    b1.onclick = () => handleRefundSingle();
+    btnList.appendChild(b1);
+
+    const b2 = document.createElement("button");
+    b2.className = "chip-btn";
+    b2.textContent = "복수강좌 환불신청";
+    b2.onclick = () => handleRefundMulti();
+    btnList.appendChild(b2);
+
+    const b3 = document.createElement("button");
+    b3.className = "chip-btn";
+    b3.textContent = "바자관 환불신청";
+    b3.onclick = () => handleRefundBazagwan();
+    btnList.appendChild(b3);
+
+    const backBtn = document.createElement("button");
+    backBtn.className = "chip-btn";
+    backBtn.textContent = "◀ 나의 수강정보로";
+    backBtn.onclick = () => openMenu("나의 수강정보");
+    btnList.appendChild(backBtn);
+
+    const homeBtn = document.createElement("button");
+    homeBtn.className = "chip-btn";
+    homeBtn.textContent = "◀ 처음으로";
+    homeBtn.onclick = () => renderMainButtons();
+    btnList.appendChild(homeBtn);
+  }
+
+  // 나의 수강정보(간단 안내: 실제 로그인/조회는 페이지에서)
+  function handleCourseInfo() {
+    addBotMessage(
+      "수강정보는 마이페이지에서 확인 가능합니다.\n" +
+      "아래 링크를 통해 접속해 주세요.",
+      `<a href="https://russeldc.megastudy.net/russel/mypage/lecture_course.asp" target="_blank">수강정보 바로가기</a>`
+    );
+  }
+  function handleWaitingInfo() {
+    addBotMessage(
+      "대기정보는 마이페이지에서 확인 가능합니다.\n" +
+      "아래 링크를 통해 접속해 주세요.",
+      `<a href="https://russeldc.megastudy.net/russel/mypage/waiting.asp" target="_blank">대기정보 바로가기</a>`
+    );
+  }
+  function handlePaymentInfo() {
+    addBotMessage(
+      "결제내역은 마이페이지에서 확인 가능합니다.\n" +
+      "아래 링크를 통해 접속해 주세요.",
+      `<a href="https://russeldc.megastudy.net/russel/mypage/student/account_list.asp" target="_blank">결제내역 바로가기</a>`
+    );
+  }
 
   function init() {
     const firstMsg =
